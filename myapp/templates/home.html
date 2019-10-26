@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HOME PAGE: DJONGO BUG</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<button id="create-mars">Create Mars</button>
+<button id="create-earth">Create Earth</button>
+<div id="data-container">
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        for (let i = 0; i < 20; i++) {
+            $.ajax({
+                url: '{% url "data" %}',
+                success: function(response) {
+                    $('#data-container').append(
+                        '<pre>' + i + ') SUCCESS: ' + response + '</pre>' 
+                    );
+                },
+                error: function(xhr, status, error) {
+                    $('#data-container').append(
+                        '<pre class="error">' + i + ') ERROR: ' + error + '</pre>'
+                    )
+                },
+            });
+        }
+
+        function create(planet) {
+            $.ajax({
+                url: '{% url "create" %}' + "?planet=" + planet
+            });
+        }
+        $('#create-mars').on('click', function() {
+            create('mars');
+        });
+        $('#create-earth').on('click', function() {
+            create('earth');
+        });
+    });
+</script>
+</body>
+</html>
